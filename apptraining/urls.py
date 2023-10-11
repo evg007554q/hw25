@@ -3,19 +3,24 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.cache import cache_page
+from rest_framework.routers import DefaultRouter
 
 from apptraining.apps import ApptrainingConfig
-
+from apptraining.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView, \
+    LessonUpdateAPIView, LessonDestroyAPIView
 
 app_name = ApptrainingConfig.name
 
+router = DefaultRouter()
+router.register(r'course', CourseViewSet, basename='course')
+
 urlpatterns = [
-    # path('', cache_page(60)(index), name='index'),
-    path('admin/', admin.site.urls),
-    # path('products/', productListView.as_view(), name='products'),
-    # path('<int:pk>/product/', cart_product, name='cart_product'),
-    # path('product/create/', ProductCreateView.as_view(), name='product_create'),
-    # path('product/<int:pk>/update/', ProductUpdateView.as_view(), name='product_update'),
-    # path('info/<int:pk>/', ProductDetailView.as_view(), name='detail_product'),
-]
+    path('lesson/create/', LessonCreateAPIView.as_view(), name='lesson_create'),
+    path('lesson/', LessonListAPIView.as_view(), name='lesson_list'),
+    path('lesson/<int:pk>/', LessonRetrieveAPIView.as_view(), name='lesson_cart'),
+    path('lesson/<int:pk>/update/', LessonUpdateAPIView.as_view(), name='lesson_update'),
+    path('lesson/<int:pk>/delete/', LessonDestroyAPIView.as_view(), name='lesson_delete'),
+
+
+] + router.urls
 # + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
