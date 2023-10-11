@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     # 'django_filters',
     'apptraining',
     'users',
+    'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -169,3 +171,10 @@ if CACHES_ENABLE:
             'LOCATION': os.getenv('LOCATION')
         }
     }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
