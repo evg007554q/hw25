@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 
 from apptraining.apps import ApptrainingConfig
 from apptraining.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView, \
-    LessonUpdateAPIView, LessonDestroyAPIView
+    LessonUpdateAPIView, LessonDestroyAPIView, Course_paymentListAPIView
 
 app_name = ApptrainingConfig.name
 
@@ -21,6 +21,8 @@ urlpatterns = [
     path('lesson/<int:pk>/update/', LessonUpdateAPIView.as_view(), name='lesson_update'),
     path('lesson/<int:pk>/delete/', LessonDestroyAPIView.as_view(), name='lesson_delete'),
 
+    #payment
+    path('Course/payment/', Course_paymentListAPIView.as_view(), name='Course_payment'),
 
-] + router.urls
+              ] + router.urls
 # + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

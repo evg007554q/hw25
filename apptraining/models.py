@@ -27,7 +27,7 @@ class Lesson(models.Model):
     """Урок"""
     name = models.CharField(max_length=100, verbose_name='Название')
     description = models.CharField(max_length=250, verbose_name='Описание урока', null=True, blank=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='категория', null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='курс', null=True, blank=True)
 
     image = models.ImageField(upload_to='image_apptraining/', verbose_name='Превью', null=True, blank=True)
 
@@ -44,3 +44,21 @@ class Lesson(models.Model):
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
         ordering = ('name',)
+
+
+
+class payment(models.Model):
+    """Урок"""
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='оплаченый курс', null=True, blank=True)
+    cash = models.BooleanField(default=True, verbose_name='Наличные')
+    Payment_amount = models.IntegerField(default=0, verbose_name='Сумма оплаты')
+    date_of_payment = models.DateTimeField(auto_now_add=True, verbose_name='дата оплата', null=True, blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Создатель')
+
+    def __str__(self):
+        return f'{self.owner} - {self.date_of_payment} '
+
+    class Meta:
+        verbose_name = 'Оплата'
+        verbose_name_plural = 'Оплаты'
+        ordering = ('date_of_payment',)
