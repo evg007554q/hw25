@@ -48,7 +48,7 @@ class Lesson(models.Model):
 
 
 class payment(models.Model):
-    """Урок"""
+    """Оплата"""
     course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='оплаченый курс', null=True, blank=True)
     cash = models.BooleanField(default=True, verbose_name='Наличные')
     Payment_amount = models.IntegerField(default=0, verbose_name='Сумма оплаты')
@@ -62,3 +62,18 @@ class payment(models.Model):
         verbose_name = 'Оплата'
         verbose_name_plural = 'Оплаты'
         ordering = ('date_of_payment',)
+
+
+
+class Subscription(models.Model):
+    """подписка на обновление"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='user')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='курс', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user} -{self.course}'
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
+        ordering = 'course',
