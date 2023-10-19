@@ -12,6 +12,8 @@ class Course(models.Model):
     last_modified_date = models.DateTimeField(auto_now_add=True, verbose_name='дата последнего изменения', null=True,
                                               blank=True)
 
+    video_url = models.URLField(null=True, blank=True, verbose_name='Ссылка на видео')
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Создатель')
 
     def __str__(self):
@@ -34,6 +36,7 @@ class Lesson(models.Model):
     date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name='дата создания', null=True, blank=True)
     last_modified_date = models.DateTimeField(auto_now_add=True, verbose_name='дата последнего изменения', null=True,
                                               blank=True)
+    video_url = models.URLField(null=True, blank=True, verbose_name='Ссылка на видео')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Создатель')
 

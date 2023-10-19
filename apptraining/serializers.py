@@ -8,18 +8,26 @@ class LessonSerializers(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
-        validators = [urlValidator(field='name')]
-        validatorsdescription = [urlValidator(field='description')]
+        validators = [urlValidator(field='video_url')]
+        # validatorsdescription = [urlValidator(field='description')]
 
 
 class CourseSerializers( serializers.ModelSerializer ):
     count_lesson = serializers.IntegerField(source='lesson_set.count',read_only=True)
     lesson = LessonSerializers(source='lesson_set', many=True,read_only=True)
+
+    Subscription = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Course
         fields = '__all__'
-        validators = [urlValidator(field='name')]
-        validatorsdescription = [urlValidator(field='description')]
+        validators = [urlValidator(field='video_url')]
+        # validatorsdescription = [urlValidator(field='description')]
+
+    def get_Subscription(self, instance):
+        request = self.context.get('request')
+        return Subscription.objects.filter(course=instance.pk, user=request.user).exists()
+
 
 class CourseShSerializers( serializers.ModelSerializer ):
     """Коротко о курсе"""
