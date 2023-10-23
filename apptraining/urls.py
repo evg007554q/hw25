@@ -13,6 +13,7 @@ app_name = ApptrainingConfig.name
 
 router = DefaultRouter()
 router.register(r'course', CourseViewSet, basename='course')
+router.register(r'createpayment', Course_paymentCreateAPIView, basename='createpayment')
 
 urlpatterns = [
     path('lesson/create/', LessonCreateAPIView.as_view(), name='lesson_create'),
@@ -23,7 +24,6 @@ urlpatterns = [
 
     #payment
     path('Course/payment/', Course_paymentListAPIView.as_view(), name='Course_payment'),
-    path('Course/Createpayment/', Course_paymentCreateAPIView.as_view(), name='Course_Createpayment'),
     path('Course/pay/<str:payment_id>/', GetPlamentView.as_view(), name='Course_info_payment'),
 
               ] + router.urls
