@@ -1,5 +1,7 @@
 
+import stripe
 from rest_framework import viewsets, generics
+import requests
 
 from apptraining.models import Course, Lesson, payment, Subscription
 from apptraining.paginators import apptrainingPaginator
@@ -11,6 +13,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -71,6 +76,35 @@ class Course_paymentListAPIView(generics.ListAPIView):
     ordering_fields = ('date_of_payment',)
     permission_classes = [IsAuthenticated, IsModerator|IsOwner]
 
+
+class Course_paymentCreateAPIView(viewsets.ModelViewSet):
+    serializer_class = CoursepaymentSerializers
+    queryset = payment.objects.all()
+
+    def perform_create(self, serializer_class):
+        newP = serializer_class.save()
+        newP.owner = self.request.user
+        newP.cash = False
+        newP.save()
+        return super.perform_create(serializer_class)
+
+
+    def Course_paymentCreate(self):
+        import stripe
+        stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+        stripe.PaymentIntent.create(
+            amount=self.queryset.Payment_amount,
+            currency="usd",
+            automatic_payment_methods={"enabled": True},
+        )
+
+class GetPlamentView(APIView):
+    """"Информция о платеже"""
+
+    def get(self, request, payment_id):
+        payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+        return Response({'status':payment_intent.status})
 
 
 
