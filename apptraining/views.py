@@ -15,7 +15,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import stripe
 
+from config.settings import STRIPE_SECRET_KEY
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -90,8 +92,9 @@ class Course_paymentCreateAPIView(viewsets.ModelViewSet):
 
 
     def Course_paymentCreate(self):
-        import stripe
-        stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+        stripe.api_key = STRIPE_SECRET_KEY
+
 
         stripe.PaymentIntent.create(
             amount=self.queryset.Payment_amount,
