@@ -1,3 +1,4 @@
+from datetime import timezone
 
 import stripe
 from rest_framework import viewsets, generics
@@ -17,6 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import stripe
 
+from apptraining.tasks import email_after_update
 from config.settings import STRIPE_SECRET_KEY
 
 
@@ -29,6 +31,12 @@ class CourseViewSet(viewsets.ModelViewSet):
         newL = serializer_class.save()
         newL.owner = self.request.user
         newL.save()
+
+    def perform_update(self, serializer):
+        update_course = serializer.save()
+
+        email_after_update.delay(update_course.pk)
+        update_course.save()
 
 
 
