@@ -17,3 +17,15 @@ class Command(BaseCommand):
 
         user.set_password('1')
         user.save()
+
+        usertest = User.objects.create(
+            email='test@test.test',
+            first_name='test',
+            last_name='test',
+            is_superuser=False,
+            is_staff=False,
+            is_active=True
+        )
+
+        usertest.set_password('1')
+        usertest.save()ccsu.py
